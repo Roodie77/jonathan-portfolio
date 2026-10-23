@@ -190,6 +190,9 @@
 
     .about-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
     .about-layout p { margin: 0; color: var(--muted); font-size: 1.05rem; }
+    .profile-card { width: min(100%, 380px); margin: 8px 0 0; border: 1px solid var(--line); background: #000; box-shadow: 0 0 34px rgba(83, 246, 255, 0.12); transition: box-shadow 220ms ease, border-color 220ms ease; }
+    .profile-card:hover { border-color: var(--cyan); box-shadow: 0 0 42px rgba(83, 246, 255, 0.28); }
+    .profile-card img { display: block; width: 100%; height: auto; }
     .api-note { padding: 22px; border-left: 2px solid var(--pink); background: rgba(255, 79, 216, 0.06); color: var(--muted); }
     .api-note strong { display: block; margin-bottom: 8px; color: var(--pink); }
 
@@ -436,6 +439,7 @@
           <div>
             <p class="section-label">The person behind the pixels</p>
             <h2 id="about-title">Ideas, made useful.</h2>
+            <figure class="profile-card"><img src="jonathan-profile.jpg" width="902" height="1280" loading="lazy" alt="Jonathan, backend developer, JavaScript core, web designer and insurance student. He builds websites, applies security best practice and upgrades existing infrastructure."></figure>
           </div>
           <div>
             <p>I'm Jonathan Adewale, a developer and creative thinker focused on making the web more useful, expressive, and human.</p>
