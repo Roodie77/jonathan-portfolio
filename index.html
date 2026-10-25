@@ -272,6 +272,29 @@
     .log .c2 { color: var(--ok); } .log .c3 { color: var(--cyan); } .log .c4 { color: var(--warn); } .log .c5 { color: var(--bad); }
     .empty { padding: 18px 14px; color: var(--muted); font-size: 0.82rem; }
 
+    .cltab { padding: 5px 12px; border: 0; border-bottom: 2px solid transparent; color: var(--muted); background: transparent; font: inherit; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; }
+    .cltab[aria-selected="true"] { color: var(--cyan); border-color: var(--cyan); }
+    .badge.under_review { color: var(--warn); } .badge.info_requested { color: var(--cyan); } .badge.siu_review { color: var(--bad); box-shadow: 0 0 8px rgba(255, 107, 107, 0.3); }
+    .badge.approved { color: var(--ok); } .badge.denied { color: var(--muted); } .badge.appealed { color: var(--pink); } .badge.paid { color: var(--ok); background: rgba(167, 255, 106, 0.1); }
+    .assess { display: grid; gap: 16px; padding: 14px; }
+    .assess .empty { padding: 4px 0; }
+    .assess h4 { margin: 0 0 8px; color: var(--pink); font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; }
+    .assess-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+    .assess .name { display: block; font-weight: 700; } .assess .sub { display: block; color: var(--muted); font-size: 0.72rem; font-family: Consolas, "Courier New", monospace; }
+    .assess .sub.inline { display: inline; } .assess .dec { margin: -6px 0 0; }
+    .route { padding: 10px 12px; border-left: 2px solid var(--cyan); background: rgba(83, 246, 255, 0.06); font-size: 0.82rem; line-height: 1.5; }
+    .route b { text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.72rem; }
+    .route.siu { border-color: var(--bad); background: rgba(255, 107, 107, 0.07); } .route.auto-denied { border-color: var(--warn); background: rgba(255, 207, 90, 0.07); } .route.straight-through { border-color: var(--ok); background: rgba(167, 255, 106, 0.07); }
+    .checks, .flags { margin: 0; padding: 0; list-style: none; font-size: 0.76rem; line-height: 1.45; }
+    .checks li { display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 6px; padding: 3px 0; } .checks b { font-weight: 700; }
+    .checks .ok { color: var(--ok); } .checks .no { color: var(--bad); } .checks .soft { color: var(--warn); }
+    .flags li { padding: 3px 0; } .flags b { color: var(--warn); font-family: Consolas, "Courier New", monospace; }
+    .money { width: 100%; border-collapse: collapse; font-family: Consolas, "Courier New", monospace; font-size: 0.78rem; }
+    .money td { padding: 3px 0; } .money td:last-child { text-align: right; }
+    .money tr.soft td:last-child { color: var(--warn); } .money tr.total td { padding-top: 7px; border-top: 1px solid var(--line); color: var(--cyan); font-weight: 700; }
+    .meter-bar { height: 8px; margin-bottom: 8px; background: rgba(145, 169, 188, 0.18); } .meter-bar i { display: block; height: 100%; background: var(--cyan); transition: width 300ms ease; }
+    .meter-bar.slim { height: 5px; margin: 0 0 4px; min-width: 90px; }
+
     @keyframes row-flash { 0% { background: rgba(255, 79, 216, 0.28); } 100% { background: transparent; } }
 
     footer { display: flex; justify-content: space-between; gap: 20px; padding: 32px 0 42px; color: var(--muted); font-size: 0.85rem; }
@@ -317,6 +340,7 @@
         <a href="#work">Work</a>
         <a href="#services">What we do</a>
         <a href="#api">API</a>
+        <a href="#claims">Insuretech</a>
         <a href="#about">About</a>
         <a href="#contact">Contact</a>
       </nav>
@@ -434,6 +458,83 @@
         </div>
       </section>
 
+      <section id="claims" aria-labelledby="claims-title">
+        <p class="section-label">Live API / insurance claims</p>
+        <h2 id="claims-title">Roodie Insuretech API.</h2>
+        <p class="api-lede">How an insurer actually handles a claim, as an API. File a claim and the engine checks the policy (active, in force, waiting period, coverage, exclusions, filing window), works out what would be payable after the deductible, coinsurance and remaining limit, scores it for fraud with every red flag spelled out, then routes it: <strong>straight-through approval</strong>, an <strong>adjuster</strong>, <strong>special investigations</strong>, or <strong>automatic denial</strong>. Adjusters decide and pay; claimants edit, appeal and withdraw. I built it because I study insurance and write backends, and this is where the two meet. Click a claim to see <em>why</em> it was routed the way it was, or run a scenario.</p>
+        <ul class="api-badges" aria-label="Roodie Insuretech API features">
+          <li><b>Straight-through</b> processing</li>
+          <li><b>Explainable</b> fraud scoring</li>
+          <li>Claimant / adjuster <b>roles</b></li>
+          <li><b>Idempotent</b> payouts</li>
+          <li><b>ETag</b> concurrency</li>
+          <li>Appeals + <b>audit trail</b></li>
+          <li><b>Loss ratio</b> KPIs</li>
+          <li><b>RFC 9457</b> errors</li>
+        </ul>
+
+        <div class="recipes" id="cl-recipes" aria-label="Claims request recipes"></div>
+
+        <div class="console">
+          <div class="panel">
+            <div class="panel-head"><span>Request</span><span class="meta">Ctrl + Enter to send</span></div>
+            <div class="panel-body">
+              <div class="req-line">
+                <select id="cl-method" aria-label="HTTP method"><option>GET</option><option>POST</option><option>PUT</option><option>PATCH</option><option>DELETE</option><option>HEAD</option><option>OPTIONS</option></select>
+                <input class="field" id="cl-path" type="text" spellcheck="false" autocomplete="off" aria-label="Request path" value="/v1/claims" />
+                <button class="send" id="cl-send" type="button">Send</button>
+              </div>
+              <label class="field-label" for="cl-headers"><span>Headers</span></label>
+              <textarea class="field" id="cl-headers" rows="4" spellcheck="false" aria-label="Request headers"></textarea>
+              <label class="field-label" for="cl-body"><span>Body (JSON)</span></label>
+              <textarea class="field" id="cl-body" rows="9" spellcheck="false" aria-label="Request body"></textarea>
+              <div class="vars" id="cl-vars" aria-live="polite"></div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head"><div class="status-line" id="cl-res-status"><span class="meta">Awaiting transmission…</span></div></div>
+            <div class="panel-body">
+              <div class="tabs" role="tablist" aria-label="Response views">
+                <button class="cltab" role="tab" aria-selected="true" data-tab="body">Body</button>
+                <button class="cltab" role="tab" aria-selected="false" data-tab="headers">Headers</button>
+                <button class="cltab" role="tab" aria-selected="false" data-tab="code">fetch()</button>
+              </div>
+              <pre class="out" id="cl-res-out" tabindex="0" aria-live="polite"></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="lower">
+          <div class="stack">
+            <div class="panel">
+              <div class="panel-head">
+                <span>Claims</span>
+                <div class="tools">
+                  <label><input type="checkbox" id="cl-show-deleted" /> show withdrawn</label>
+                  <button class="chip bad" id="cl-reset" type="button">Reset sandbox</button>
+                </div>
+              </div>
+              <div class="reg-wrap"><table class="registry"><thead><tr><th>Claim</th><th>Amount</th><th>Fraud risk</th><th>Status</th></tr></thead><tbody id="cl-claims-body"></tbody></table></div>
+            </div>
+            <div class="panel">
+              <div class="panel-head"><span>Policies</span><span class="meta">limit used (paid + reserved)</span></div>
+              <div class="reg-wrap"><table class="registry"><thead><tr><th>Policyholder</th><th>Status</th><th>Cover used</th></tr></thead><tbody id="cl-policies-body"></tbody></table></div>
+            </div>
+          </div>
+          <div class="stack">
+            <div class="panel">
+              <div class="panel-head"><span>Why this decision?</span><span class="meta">selected claim</span></div>
+              <div class="assess" id="cl-assess"></div>
+            </div>
+            <div class="panel">
+              <div class="panel-head"><span>Traffic</span><span class="meta" id="cl-rate-meta"></span></div>
+              <ul class="log" id="cl-log"><li class="empty">No traffic yet.</li></ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section id="about" aria-labelledby="about-title">
         <div class="about-layout">
           <div>
@@ -443,7 +544,7 @@
           </div>
           <div>
             <p>I'm Jonathan Adewale, a developer and creative thinker focused on making the web more useful, expressive, and human.</p>
-            <div class="api-note" style="margin-top: 28px;"><strong>API online</strong><span id="api-status">Connecting to the Xeno Shield…</span> <a href="#api" style="color: var(--cyan);">Test it →</a></div>
+            <div class="api-note" style="margin-top: 28px;"><strong>API online</strong><span id="api-status">Connecting to the Xeno Shield…</span> <a href="#api" style="color: var(--cyan);">Test it →</a><br><span id="claims-status">Connecting to the Roodie Insuretech API…</span> <a href="#claims" style="color: var(--cyan);">Try it →</a></div>
           </div>
         </div>
       </section>
@@ -461,6 +562,7 @@
   </div>
 
   <script src="xeno-api.js"></script>
+  <script src="claims-api.js"></script>
   <script>
     const RESUME_PIN = "1059";
     const themeToggle = document.querySelector("#theme-toggle");
@@ -894,5 +996,6 @@
       }).catch(() => { statusEl.textContent = "The shield is unreachable."; });
     })();
   </script>
+  <script src="claims-console.js"></script>
 </body>
 </html>

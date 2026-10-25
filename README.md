@@ -1,3 +1,14 @@
+# Xeno: two APIs, one portfolio
+
+This repo holds two backend projects that run live inside my portfolio site:
+
+- **[Xeno Shield API](#xeno-shield-api)**: quarantines bad data and stops brute-force and abuse attacks.
+- **[Roodie Insuretech API](#roodie-insuretech-api)**: an insurance claims engine with coverage maths, fraud scoring, adjuster decisions, payouts and appeals.
+
+Both are built the same way (real HTTP semantics, no dependencies, runs in the browser or in Node), so the engineering patterns carry across: ETag concurrency, idempotency, problem+json errors, cursor pagination and audit history.
+
+---
+
 # Xeno Shield API
 
 A defensive API for websites and apps. It has two jobs:
@@ -166,19 +177,132 @@ The security features sit on top of API basics I wanted to get right:
 
 `200` `201` `204` `304` · `400` bad input or cursor · `401` no or bad token · `403` guard blocked the attempt · `404` `405` · `409` conflict, duplicate or illegal transition · `410` deleted · `412` stale ETag · `415` wrong content type · `422` validation or business rule · `428` missing `If-Match` · `429` slow down
 
-## Project layout
-
-```
-index.html     the portfolio, including the API console UI
-xeno-api.js    the whole API engine (no dependencies)
-```
-
-## Honest limitations
+## Honest limitations (Shield)
 
 - It's a sandbox. Data lives in one browser's `localStorage`, and there's a single demo token.
 - The detectors are heuristics and will have both misses and false positives. That's what the review workflow and the policy threshold are for.
 - It simulates a server, so other apps can't call it over the network. If I host it for real, the engine is written to port cleanly to a Node backend.
 - The guard's attempt windows are held in memory, so they reset on page reload. Bans, cases and policies persist.
+
+---
+
+# Roodie Insuretech API
+
+I'm studying insurance and I write backends, so this is where the two meet: an API that handles an insurance claim the way a real insurer does, and **shows its working** at every step.
+
+Try it in the **Claims** section of the portfolio. Click any claim to see *why* it was routed the way it was, or run one of the scripted scenarios. Or from devtools:
+
+```js
+const res = await claims.fetch('/v1/claims?risk=high&sort=-fraud_score');
+console.log(await res.json());
+```
+
+## How a claim flows
+
+```
+claimant files ──► eligibility ──► coverage maths ──► fraud score ──► routing
+                                                                        │
+        ┌───────────────────┬──────────────────┬────────────────────────┘
+        ▼                   ▼                  ▼                       ▼
+  straight-through       adjuster             SIU                auto-denied
+  (approved at once)   (under review)   (special investigation)   (with reason codes)
+```
+
+`POST /v1/claims` runs all of this in one request and returns the claim with its full **assessment**:
+
+```json
+{
+  "claim_number": "CLM-2026-000018",
+  "status": "under_review",
+  "assessment": {
+    "eligibility": [
+      { "rule": "policy.active", "hard": true, "passed": true, "detail": "Policy is active." },
+      { "rule": "policy.waiting-period", "hard": true, "passed": true, "detail": "No waiting period." }
+    ],
+    "coverage": { "amount_after_deductible": 1350, "insurer_share": 1350, "remaining_limit": 20000, "payable_estimate": 1350 },
+    "fraud": { "score": 35, "band": "medium", "flags": [{ "code": "possible-duplicate", "weight": 35, "detail": "…" }] },
+    "routing": { "path": "adjuster", "reason": "Fraud band is \"medium\" (score 35)." }
+  }
+}
+```
+
+**Eligibility.** Hard rules (policy active, incident inside the policy period, waiting period served, claim type covered, limit remaining, filed within 60 days) cause an automatic denial with reason codes. Soft rules (exclusion wording such as "racing") don't deny on a keyword alone; they send the claim to a human, because wording can mislead.
+
+**Coverage maths.** `payable = min((claimed − deductible) × (1 − coinsurance%), remaining limit)`. The remaining limit shrinks as claims are approved and paid.
+
+**Fraud scoring.** Transparent, weighted red flags: possible duplicate, claim soon after the policy started, frequent claims, amount near the policy limit, amount far above typical for that type, suspicious wording, late filing and suspiciously round amounts. Below 25 is low, 25–49 medium, 50+ high.
+
+**Routing.** High fraud risk goes to special investigations. Low risk, fully eligible and under the policy's auto-approve limit is approved straight away. Everything else goes to an adjuster.
+
+## Lifecycle and roles
+
+```
+under_review ─► approved ─► paid
+     │  ▲  ╲
+     │  │   └► denied ─► appealed ─► (decided again)
+     ▼  │
+info_requested        siu_review ─► approved / denied
+```
+
+| Role | Token | Can do |
+|---|---|---|
+| claimant | `claimant_demo_key` | file, edit while pending, add documents, appeal, withdraw |
+| adjuster | `adjuster_demo_key` | decide, pay, restore, issue and amend policies |
+
+Reads are open in the sandbox. The wrong role gets `403`, no token gets `401`. Status is never written directly; it moves through actions:
+
+- `POST /claims/{id}/decision` with `approve`, `deny`, `request_info` or `escalate`. Approving above what's payable is a `422`. Approving an SIU-flagged claim, or overriding a failed eligibility rule, needs a written justification.
+- `POST /claims/{id}/pay` pays an approved claim. Paying twice is a `409`.
+- `POST /claims/{id}/appeal` re-opens a denied claim **once**, within 30 days.
+- `POST /claims/{id}/documents` attaches a document and sends an `info_requested` claim back to review.
+
+## Endpoints
+
+| Method | Path | Who | What it does |
+|---|---|---|---|
+| GET | `/v1/policies`, `/v1/policies/{id}` | anyone | Policies, with live usage (paid, reserved, remaining limit) |
+| POST · PUT · PATCH | `/v1/policies`, `/v1/policies/{id}` | adjuster | Issue and amend. Policies are cancelled, never deleted |
+| GET · POST | `/v1/claims` | anyone · claimant | List (filters, sort, cursor paging) · file a claim |
+| GET · PATCH · DELETE | `/v1/claims/{id}` | anyone · claimant | Read · edit amount/description while pending · withdraw |
+| POST | `/v1/claims/{id}/decision` | adjuster | approve / deny / request_info / escalate |
+| POST | `/v1/claims/{id}/pay` | adjuster | Pay an approved claim |
+| POST | `/v1/claims/{id}/appeal` | claimant | Appeal a denial |
+| POST | `/v1/claims/{id}/documents` | claimant | Attach a document |
+| POST | `/v1/claims/{id}/restore` | adjuster | Undo a withdrawal |
+| GET | `/v1/claims/{id}/history`, `/v1/policies/{id}/history` | anyone | Audit trail with who did what |
+| GET | `/v1/stats` | anyone | Straight-through rate, flagged rate, money, **loss ratio per product** |
+
+Claim filters: `status`, `type`, `risk`, `path`, `policy_id`, `min_amount`, `max_amount`, `q`. Sort by `created_at`, `amount_claimed`, `fraud_score`, `incident_date`.
+
+## The parts I care about
+
+- **A payout must never happen twice.** `POST …/pay` honours `Idempotency-Key`, and the scenario **Double-pay attempt** fires three simultaneous pay requests and produces exactly one payment reference. A keyless second payment is refused with `409`.
+- **Two adjusters can't clobber each other.** Decisions need `If-Match`. The scenario **Two adjusters collide** shows the second adjuster's stale write getting `412`, and then `409` once they re-read and see the claim is already approved.
+- **Duplicates are flagged, not blocked.** Filing the same loss twice is a fraud signal, not a validation error, so the second claim is accepted but scored and routed. The same `Idempotency-Key` still replays instead of filing a third.
+- **Financial records are never deleted.** Withdrawing a claim is a soft delete (`410 Gone`, restorable by an adjuster). `?purge=true` is refused with `409`.
+- **Business rules are enforced, not assumed.** A policy can't be sold coverage its product doesn't offer, its limit can't drop below what's already paid or reserved, a cancelled policy stays cancelled, and `policy_id`, `type` and `incident_date` are immutable once a claim is filed.
+- **Everything is explainable.** Every decision stores who made it, when and why, and the history endpoint shows the full trail with the actor (claimant, adjuster or system).
+
+The shared hygiene from the Shield API applies here too: ETag/`If-Match` on writes (`428`/`412`), JSON Merge Patch, RFC 9457 problem+json errors, keyset cursor pagination and a token-bucket rate limit.
+
+## Honest limitations (Claims)
+
+- Sandbox only. It's a simulated server with `localStorage`, two demo tokens, and open reads. A real system would scope reads so a claimant only sees their own claims.
+- The fraud rules are a simple weighted heuristic with made-up weights, not an actuarial or machine-learning model. The point is that the logic is transparent and tunable.
+- Deductible is applied per claim, and there's no tax, subrogation, partial payments, reinsurance or document file storage. Documents are metadata only.
+- Money is plain numbers rounded to cents. A real ledger would use integer minor units and double-entry accounting.
+
+---
+
+## Project layout
+
+```
+index.html          the portfolio, including both API sections
+xeno-api.js         Shield engine (no dependencies)
+claims-api.js       Claims engine (no dependencies)
+claims-console.js   the Claims test console UI
+jonathan-profile.jpg
+```
 
 ## Author
 
