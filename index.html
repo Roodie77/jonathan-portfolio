@@ -30,7 +30,12 @@
       --line: rgba(16, 82, 112, 0.2);
       --background: #edf7fb;
       --grid: rgba(16, 82, 112, 0.06);
+      /* darker accents so cyan/pink text stays readable on the light background */
+      --cyan: #08707f;
+      --pink: #b0177c;
     }
+    [data-theme="light"] .button:hover, [data-theme="light"] .button:focus-visible,
+    [data-theme="light"] .send:hover, [data-theme="light"] .send:focus-visible { color: #fff; box-shadow: 0 0 22px rgba(8, 112, 127, 0.35); }
 
     * { box-sizing: border-box; }
 
@@ -139,7 +144,7 @@
     .term-bar b { margin-left: 0.7em; color: #6f8aa0; font: 400 0.7em Consolas, "Courier New", monospace; letter-spacing: 0.05em; }
     .term { font: 0.74em/1.75 Consolas, "Courier New", monospace; }
     .term p { margin: 0; white-space: nowrap; opacity: 0; animation: term-line 12s ease-in-out infinite; animation-delay: var(--d, 0s); }
-    .term .pr { color: var(--pink); } .term .cmd { color: #53f6ff; } .term .ok { color: #a7ff6a; } .term .k { color: #53f6ff; } .term .v { color: #a7ff6a; } .term .dim { color: #6f8aa0; }
+    .term .pr { color: #ff4fd8; } .term .cmd { color: #53f6ff; } .term .ok { color: #a7ff6a; } .term .k { color: #53f6ff; } .term .v { color: #a7ff6a; } .term .dim { color: #6f8aa0; }
     .term .caret { display: inline-block; width: 0.5em; height: 0.95em; vertical-align: -0.12em; background: var(--pink); box-shadow: 0 0 0.6em var(--pink); animation: cursor-blink 1s steps(2) infinite; }
 
     .hinge { position: absolute; left: 3.3em; top: 16.75em; width: 27.4em; height: 0.7em; border-radius: 0 0 0.5em 0.5em; background: linear-gradient(#070b10, #27303b 45%, #0a0f15); box-shadow: 0 0.2em 0.6em rgba(0, 0, 0, 0.5); }
@@ -440,7 +445,7 @@
       <a class="mark" href="#top">JA / 2026</a>
       <nav aria-label="Main navigation">
         <a href="#work">Work</a>
-        <a href="#services">What we do</a>
+        <a href="#services">What I do</a>
         <a href="#api">API</a>
         <a href="#claims">Insuretech</a>
         <a href="#about">About</a>
@@ -517,15 +522,15 @@
         <p class="section-label">Selected work</p>
         <h2 id="work-title">A few things in motion.</h2>
         <div class="project-grid">
-          <article class="project"><span class="project-number">01 / BUILD</span><h3>Project one</h3><p>An event platform api ,that create events ,delete events,update events,list events best one yet increments handled atomically,can also get new events by id .</p></article>
-          <article class="project"><span class="project-number">02 / SHIP</span><div class="project-gallery"><img class="project-image" src="project-2-1.jpg" alt="Project Two screenshot 1"><img class="project-image" src="project-2-2.jpg" alt="Project Two screenshot 2"><img class="project-image" src="project-2-3.jpg" alt="Project Two screenshot 3"><img class="project-image" src="project-2-4.jpg" alt="Project Two screenshot 4"></div><h3>Project two</h3><p>Made in company of amazing tech fellows at Bethechified.</p></article>
-          <article class="project"><span class="project-number">03 / EXPLORE</span><h3>Project three</h3><p> for experiments, collaborations, or case studies click the github link bellow.</p></article>
+          <article class="project"><span class="project-number">01 / BUILD</span><h3>Event Platform API</h3><p>An event platform API that creates, updates, deletes and lists events, and can fetch any event by its ID. Increments are handled atomically. My best one yet.</p></article>
+          <article class="project"><span class="project-number">02 / SHIP</span><div class="project-gallery"><img class="project-image" src="project-2-1.jpg" alt="Project Two screenshot 1"><img class="project-image" src="project-2-2.jpg" alt="Project Two screenshot 2"><img class="project-image" src="project-2-3.jpg" alt="Project Two screenshot 3"><img class="project-image" src="project-2-4.jpg" alt="Project Two screenshot 4"></div><h3>Event Booking API</h3><p>Built in the company of amazing tech fellows at Bethechified.</p></article>
+          <article class="project"><span class="project-number">03 / EXPLORE</span><h3>More on GitHub</h3><p>For experiments, collaborations or case studies, head to my <a href="https://github.com/Roodie77" target="_blank" rel="noreferrer" style="color: var(--cyan);">GitHub</a>.</p></article>
         </div>
       </section>
 
       <section id="services" aria-labelledby="services-title">
         <p class="section-label">Capabilities</p>
-        <h2 id="services-title">What we do.</h2>
+        <h2 id="services-title">What I do.</h2>
         <div class="service-grid">
           <article class="service"><span class="service-number">01 / API</span><h3>Build useful APIs.</h3><p>Reliable endpoints for creating, updating, listing, and connecting the data your product needs.</p></article>
           <article class="service"><span class="service-number">02 / WEB</span><h3>Shape the experience.</h3><p>Clear, responsive interfaces that make complex products feel simple to use.</p></article>
