@@ -400,6 +400,12 @@
   document.querySelectorAll(".cltab").forEach((t) => t.addEventListener("click", () => { tab = t.dataset.tab; renderResponse(); }));
   el.send.addEventListener("click", send);
   [el.path, el.headers, el.body].forEach((f) => f.addEventListener("keydown", (e) => { if ((e.ctrlKey || e.metaKey) && e.key === "Enter") { e.preventDefault(); send(); } }));
+  // Other parts of the page (e.g. the hero laptop's spacebar) can ask for a scenario to run.
+  window.addEventListener("claims:run", (e) => {
+    if (!SCENARIOS[e.detail]) return;
+    const start = () => (el.send.disabled ? setTimeout(start, 150) : scenario(e.detail)); // wait if a request is in flight
+    start();
+  });
 
   /* ── boot ── */
   renderRecipes();
