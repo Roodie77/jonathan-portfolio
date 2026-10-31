@@ -294,13 +294,50 @@ The shared hygiene from the Shield API applies here too: ETag/`If-Match` on writ
 
 ---
 
+---
+
+# Test both APIs with curl
+
+The two engines also run as a **real HTTP server** on your own machine. That means you can hit them with curl, Postman or any HTTP client, not just the in-browser consoles.
+
+```bash
+git clone https://github.com/Roodie77/jonathan-portfolio.git
+cd jonathan-portfolio
+node server.js --fresh              # Node 18+, no npm install; leave it running
+```
+
+In a second terminal:
+
+```bash
+source scripts/curl-helpers.sh      # bash or zsh (Git Bash/WSL on Windows)
+api $INS                            # Roodie Insuretech API index
+api "$SHD/quarantine?severity=high,critical"
+```
+
+| API | Base URL |
+|---|---|
+| Roodie Insuretech API | `http://localhost:3000/insuretech/v1` |
+| Xeno Shield API | `http://localhost:3000/shield/v1` |
+
+The server binds to `127.0.0.1` only, so nothing is exposed to the network, and it saves state in `./data` between runs (`--fresh` resets it). `api` is just curl plus the HTTP status and pretty-printed JSON; replace it with `curl` to see raw output.
+
+**[roodie-api-curl-guide.pdf](roodie-api-curl-guide.pdf)** is a 13-page walkthrough with **46 commands** across both APIs: filing and routing claims, ETag and role errors, idempotent payments, input screening with evasion, a real brute-force loop (`200 200 429 429 403 403…`) and password spraying. Every command in it was executed against this server with real curl, and the "Expect" lines are what came back. The guide is also on the portfolio site.
+
+Demo tokens: `claimant_demo_key` and `adjuster_demo_key` (Insuretech), `xeno_demo_key` (Shield). Reads need no token.
+
+---
+
 ## Project layout
 
 ```
-index.html          the portfolio, including both API sections
-xeno-api.js         Shield engine (no dependencies)
-claims-api.js       Claims engine (no dependencies)
-claims-console.js   the Claims test console UI
+index.html                    the portfolio, including both API sections
+xeno-api.js                   Shield engine (no dependencies)
+claims-api.js                 Insuretech engine (no dependencies)
+claims-console.js             the Insuretech test console UI
+server.js                     real HTTP server for both engines (local only)
+scripts/curl-helpers.sh       api / field / etag / day helpers for curl
+roodie-api-curl-guide.pdf     the curl test guide
+package.json                  `npm start` runs the server
 jonathan-profile.jpg
 ```
 

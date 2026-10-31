@@ -1,0 +1,12 @@
+{
+  "name": "roodie-apis",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Roodie Insuretech API and Xeno Shield API: backend projects by Jonathan (Roodie77).",
+  "author": "Jonathan (Roodie77)",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "start": "node server.js",
+    "fresh": "node server.js --fresh"
+  }
+}

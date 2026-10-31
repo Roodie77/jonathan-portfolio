@@ -295,6 +295,24 @@
     .meter-bar { height: 8px; margin-bottom: 8px; background: rgba(145, 169, 188, 0.18); } .meter-bar i { display: block; height: 100%; background: var(--cyan); transition: width 300ms ease; }
     .meter-bar.slim { height: 5px; margin: 0 0 4px; min-width: 90px; }
 
+    /* ── cURL guide section ── */
+    .curl-grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 14px; align-items: start; }
+    .curl-step { margin: 14px 0 6px; font-size: 0.86rem; } .curl-step:first-child { margin-top: 0; } .curl-step b { color: var(--pink); }
+    .cmd-row { display: flex; gap: 8px; align-items: stretch; }
+    .cmd-row pre { flex: 1; min-width: 0; margin: 0; padding: 10px 12px; overflow-x: auto; border: 1px solid var(--line); background: var(--code-bg); color: var(--ink); font: 0.8rem/1.55 Consolas, "Courier New", monospace; }
+    .copy { align-self: flex-start; padding: 6px 12px; border: 1px solid var(--line); color: var(--cyan); background: transparent; font: inherit; font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; transition: border-color 150ms ease, color 150ms ease; }
+    .copy:hover, .copy:focus-visible { border-color: var(--cyan); } .copy.done { color: var(--ok); border-color: var(--ok); }
+    .curl-note { margin: 14px 0 0; color: var(--muted); font-size: 0.8rem; } .curl-note b { color: var(--ink); }
+    .btn-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; } .btn-row .button { margin-top: 0; }
+    .button.ghost { border-color: var(--line); color: var(--muted); box-shadow: none; }
+    .curl-list h4 { margin: 0 0 6px; color: var(--pink); font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; } .curl-list h4:not(:first-child) { margin-top: 16px; }
+    .curl-list ul { margin: 0; padding-left: 18px; color: var(--muted); font-size: 0.86rem; } .curl-list li { margin: 4px 0; } .curl-list code { color: var(--cyan); font-family: Consolas, "Courier New", monospace; font-size: 0.9em; }
+    .pdf-preview { margin-top: 14px; border: 1px solid var(--line); background: var(--surface); }
+    .pdf-preview summary { padding: 12px 16px; color: var(--cyan); font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; }
+    .pdf-preview[open] summary { border-bottom: 1px solid var(--line); }
+    .pdf-frame object { display: block; width: 100%; height: 780px; border: 0; } .pdf-frame p { margin: 0; padding: 18px; color: var(--muted); } .pdf-frame a { color: var(--cyan); }
+    @media (max-width: 700px) { .curl-grid { grid-template-columns: 1fr; } .pdf-frame object { height: 520px; } .cmd-row { flex-direction: column; } .copy { align-self: stretch; } }
+
     @keyframes row-flash { 0% { background: rgba(255, 79, 216, 0.28); } 100% { background: transparent; } }
 
     footer { display: flex; justify-content: space-between; gap: 20px; padding: 32px 0 42px; color: var(--muted); font-size: 0.85rem; }
@@ -388,7 +406,7 @@
       <section id="api" aria-labelledby="api-title">
         <p class="section-label">Live API / attack it yourself</p>
         <h2 id="api-title">Xeno Shield API.</h2>
-        <p class="api-lede">A defensive API for websites and apps. It does two jobs: <strong>quarantine bad data</strong> before it reaches your database (SQL injection, XSS, path traversal, log4shell, obfuscated payloads, even encoded evasions), and <strong>stop abuse</strong> before it reaches your users (brute force, credential stuffing, password spraying, distributed attacks) with bans that escalate on repeat offenders. It runs entirely in your browser and speaks real HTTP semantics. Fire the recipes, launch a simulated attack, edit anything, or open devtools and call <code>xeno.fetch('/v1/quarantine')</code>.</p>
+        <p class="api-lede">A defensive API for websites and apps. It does two jobs: <strong>quarantine bad data</strong> before it reaches your database (SQL injection, XSS, path traversal, log4shell, obfuscated payloads, even encoded evasions), and <strong>stop abuse</strong> before it reaches your users (brute force, credential stuffing, password spraying, distributed attacks) with bans that escalate on repeat offenders. It runs entirely in your browser and speaks real HTTP semantics. Fire the recipes, launch a simulated attack, edit anything, or open devtools and call <code>xeno.fetch('/v1/quarantine')</code>. Prefer a terminal? <a href="#curl" style="color: var(--cyan);">Test both with curl →</a></p>
         <ul class="api-badges" aria-label="API features">
           <li><b>8</b> detector families</li>
           <li><b>Evasion-proof</b> (URL-decode, Unicode)</li>
@@ -461,7 +479,7 @@
       <section id="claims" aria-labelledby="claims-title">
         <p class="section-label">Live API / insurance claims</p>
         <h2 id="claims-title">Roodie Insuretech API.</h2>
-        <p class="api-lede">How an insurer actually handles a claim, as an API. File a claim and the engine checks the policy (active, in force, waiting period, coverage, exclusions, filing window), works out what would be payable after the deductible, coinsurance and remaining limit, scores it for fraud with every red flag spelled out, then routes it: <strong>straight-through approval</strong>, an <strong>adjuster</strong>, <strong>special investigations</strong>, or <strong>automatic denial</strong>. Adjusters decide and pay; claimants edit, appeal and withdraw. I built it because I study insurance and write backends, and this is where the two meet. Click a claim to see <em>why</em> it was routed the way it was, or run a scenario.</p>
+        <p class="api-lede">How an insurer actually handles a claim, as an API. File a claim and the engine checks the policy (active, in force, waiting period, coverage, exclusions, filing window), works out what would be payable after the deductible, coinsurance and remaining limit, scores it for fraud with every red flag spelled out, then routes it: <strong>straight-through approval</strong>, an <strong>adjuster</strong>, <strong>special investigations</strong>, or <strong>automatic denial</strong>. Adjusters decide and pay; claimants edit, appeal and withdraw. I built it because I study insurance and write backends, and this is where the two meet. Click a claim to see <em>why</em> it was routed the way it was, or run a scenario. <a href="#curl" style="color: var(--cyan);">Run it with curl instead →</a></p>
         <ul class="api-badges" aria-label="Roodie Insuretech API features">
           <li><b>Straight-through</b> processing</li>
           <li><b>Explainable</b> fraud scoring</li>
@@ -533,6 +551,58 @@
             </div>
           </div>
         </div>
+      </section>
+
+      <section id="curl" aria-labelledby="curl-title">
+        <p class="section-label">Test it with curl</p>
+        <h2 id="curl-title">Prefer a terminal?</h2>
+        <p class="api-lede">Both APIs also run as a <strong>real HTTP server</strong> you start on your own machine. Clone the repo, run one command, and hit them with curl. The PDF guide walks through <strong>46 commands</strong> for both APIs, and every one was executed against the live server, so the results it shows are real.</p>
+
+        <div class="curl-grid">
+          <div class="panel">
+            <div class="panel-head"><span>Quick start</span><span class="meta">Node 18+ and curl</span></div>
+            <div class="panel-body">
+              <p class="curl-step"><b>1.</b> Get the code</p>
+              <div class="cmd-row"><pre>git clone https://github.com/Roodie77/jonathan-portfolio.git
+cd jonathan-portfolio</pre><button class="copy" type="button" aria-label="Copy these commands">Copy</button></div>
+              <p class="curl-step"><b>2.</b> Start the server <span class="meta">(leave it running)</span></p>
+              <div class="cmd-row"><pre>node server.js --fresh</pre><button class="copy" type="button" aria-label="Copy this command">Copy</button></div>
+              <p class="curl-step"><b>3.</b> In a second terminal, load the helpers and make your first call</p>
+              <div class="cmd-row"><pre>source scripts/curl-helpers.sh
+api $INS</pre><button class="copy" type="button" aria-label="Copy these commands">Copy</button></div>
+              <p class="curl-note">The server listens on <b>localhost only</b>, so nothing is exposed to the internet. On Windows use Git Bash or WSL.</p>
+              <div class="btn-row">
+                <a class="button" href="roodie-api-curl-guide.pdf" download>Download the PDF guide</a>
+                <a class="button ghost" href="roodie-api-curl-guide.pdf" target="_blank" rel="noopener">Open in a new tab</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head"><span>Inside the guide</span><span class="meta">13 pages · 46 verified commands</span></div>
+            <div class="panel-body curl-list">
+              <h4>Roodie Insuretech API</h4>
+              <ul>
+                <li>File claims and watch them routed: straight-through, adjuster, fraud review, auto-denied</li>
+                <li>A blind write refused (<code>428</code>), a wrong role (<code>403</code>), a stale read (<code>412</code>)</li>
+                <li>Pay a claim, retry it safely, then try to pay it twice</li>
+                <li>Appeals, documents, withdrawals and the loss-ratio report</li>
+              </ul>
+              <h4>Xeno Shield API</h4>
+              <ul>
+                <li>Screen form fields for SQL injection and XSS, including double-encoded evasion</li>
+                <li>Review the quarantine and see the state machine refuse illegal moves</li>
+                <li>Fire a real brute-force loop: <code>200 200 429 429 403 403…</code></li>
+                <li>Password spraying across many IPs, caught by the password fingerprint</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <details class="pdf-preview" id="pdf-preview">
+          <summary>Preview the guide without leaving the page</summary>
+          <div class="pdf-frame" id="pdf-frame"></div>
+        </details>
       </section>
 
       <section id="about" aria-labelledby="about-title">
@@ -997,5 +1067,34 @@
     })();
   </script>
   <script src="claims-console.js"></script>
+  <script>
+    /* cURL section: copy buttons and a lazy PDF preview */
+    (function () {
+      document.querySelectorAll(".cmd-row").forEach((row) => {
+        const btn = row.querySelector(".copy");
+        const text = row.querySelector("pre").textContent;
+        btn.addEventListener("click", async () => {
+          let ok = false;
+          try { await navigator.clipboard.writeText(text); ok = true; } catch (e) {
+            const ta = document.createElement("textarea");
+            ta.value = text; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.opacity = "0";
+            document.body.appendChild(ta); ta.select();
+            try { ok = document.execCommand("copy"); } catch (err) { ok = false; }
+            ta.remove();
+          }
+          btn.textContent = ok ? "Copied" : "Press Ctrl+C";
+          btn.classList.toggle("done", ok);
+          setTimeout(() => { btn.textContent = "Copy"; btn.classList.remove("done"); }, 1800);
+        });
+      });
+      const details = document.querySelector("#pdf-preview");
+      const frame = document.querySelector("#pdf-frame");
+      if (details && frame) details.addEventListener("toggle", () => {
+        if (!details.open || frame.firstChild) return;
+        // Created on first open so the 480 KB PDF is not downloaded unless someone asks for it.
+        frame.innerHTML = '<object data="roodie-api-curl-guide.pdf#view=FitH" type="application/pdf" aria-label="Roodie API curl guide (PDF)"><p>Your browser cannot show PDFs inline. <a href="roodie-api-curl-guide.pdf" download>Download the guide</a> instead.</p></object>';
+      });
+    })();
+  </script>
 </body>
 </html>
