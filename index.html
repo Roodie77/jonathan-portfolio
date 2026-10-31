@@ -108,12 +108,13 @@
     .hero {
       display: grid;
       position: relative;
-      overflow: hidden;
       min-height: 78vh;
       align-content: center;
       padding: 80px 0 110px;
     }
 
+    /* Only the flying star is clipped (so it can't cause a sideways scrollbar); the heading's neon glow is free to spill. */
+    .hero-sky { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
     .hero-layout { display: grid; grid-template-columns: minmax(0, 1fr) 340px; align-items: center; gap: 54px; }
 
     /* A laptop built from CSS. Everything is sized in em, so the whole model scales with one font-size. */
@@ -466,7 +467,7 @@
 
     <main id="top">
       <section class="hero" aria-labelledby="welcome-title">
-        <span class="star-runner" aria-hidden="true"></span>
+        <span class="hero-sky" aria-hidden="true"><span class="star-runner"></span></span>
         <div class="hero-layout">
           <div>
             <p class="eyebrow">Digital creator / problem solver</p>
